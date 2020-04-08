@@ -25,3 +25,10 @@ allprojects {
 task clean(type: Delete) {
   delete rootProject.buildDir
 }
+
+ext {
+  gsonVersion='2.8.0'
+  retrofit2='2.3.0'
+  gson='2.3.0'
+  okhttp3='3.4.1'
+}

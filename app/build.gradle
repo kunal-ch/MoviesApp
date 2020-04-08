@@ -42,4 +42,10 @@ dependencies {
   def runnerVersion = "1.2.0"
   androidTestImplementation "androidx.test:runner:$runnerVersion"
   androidTestImplementation "androidx.test:rules:$runnerVersion"
+
+  // Networking
+  implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit2"
+  implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+  implementation "com.squareup.retrofit2:converter-gson:$rootProject.gson"
+  implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp3"
 }
