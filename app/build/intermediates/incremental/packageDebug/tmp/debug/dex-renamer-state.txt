@@ -1,0 +1,4 @@
+#Wed Apr 08 15:03:35 IST 2020
+base.0=/Users/kunalchauhan/Downloads/iMet-Materials/MoviesApp/app/build/intermediates/dex/debug/out/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
