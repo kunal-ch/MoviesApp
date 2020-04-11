@@ -8,4 +8,4 @@ data class Movie(val id: Long,
                  val vote: Float,
                  val releaseDate: String,
                  val backdrop: String?,
-                 var poster: String?) : Serializable
+                 var poster_path: String?) : Serializable

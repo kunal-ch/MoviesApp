@@ -8,4 +8,12 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="Rubik" />
+
+  <style name="Rubik.Title">
+    <item name="android:gravity">center</item>
+    <item name="android:textColor">@color/grey</item>
+    <item name="android:textSize">18sp</item>
+  </style>
+
 </resources>
