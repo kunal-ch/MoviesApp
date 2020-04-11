@@ -48,4 +48,7 @@ dependencies {
   implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
   implementation "com.squareup.retrofit2:converter-gson:$rootProject.gson"
   implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp3"
+
+  def lifecycleVersion = "1.1.1"
+  implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
 }
