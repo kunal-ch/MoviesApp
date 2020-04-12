@@ -32,7 +32,7 @@
                     style="@style/Rubik.Title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:layout_marginStart="50dp"
                     android:textStyle="bold"
                     android:text="@string/discover" />
 

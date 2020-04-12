@@ -2,11 +2,11 @@ package com.kc.movies.ui.list
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,6 +25,7 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
 
   private lateinit var viewModel: MovieListViewModel
   private var movieListAdapter: MovieListAdapter? = null
+  var searchView: SearchView? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -41,6 +42,22 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
     })
     checkForConnection()
     checkForError()
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.menu_home, menu)
+    val searchMenuItem = menu.findItem(R.id.searchItem)
+    searchView = searchMenuItem.actionView as SearchView
+    searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+      override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+      }
+      override fun onQueryTextChange(newText: String?): Boolean {
+        movieListAdapter!!.filter.filter(newText)
+        return false
+      }
+    })
+    return true
   }
 
   private fun checkForError() {
@@ -100,5 +117,6 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
     val intent = Intent(this, MovieDetailActivity::class.java)
     intent.putExtras(bundle)
     startActivity(intent)
+    homeToolbar.collapseActionView()
   }
 }
