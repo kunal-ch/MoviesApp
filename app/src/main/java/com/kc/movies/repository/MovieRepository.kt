@@ -6,6 +6,7 @@ import com.kc.movies.model.Movie
 import com.kc.movies.model.MovieResponse
 import com.kc.movies.service.ApiClient
 import com.kc.movies.service.MovieCallback
+import com.kc.movies.service.MovieDetailCallback
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,7 +14,7 @@ import retrofit2.Response
 class MovieRepository(application: Application) {
 
     fun getMovies(callback: MovieCallback<Movie>){
-        var call = ApiClient.build()?.discover(1)
+        var call = ApiClient.build()?.getTopRatedMovies(1)
         call?.enqueue(object : Callback<MovieResponse> {
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 callback.onError(t.message)
@@ -28,4 +29,19 @@ class MovieRepository(application: Application) {
         })
     }
 
+    fun getMovieDetail(id: Long, callback: MovieDetailCallback<Movie>){
+        var call = ApiClient.build()?.getMovieDetails(id)
+        call?.enqueue(object : Callback<Movie> {
+            override fun onFailure(call: Call<Movie>, t: Throwable) {
+                callback.onError(t.message)
+            }
+            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
+                if (response.body() != null) {
+                    val movieResponse:Movie  = response.body()!!
+                    Log.d("TAG", "response: $movieResponse")
+                    callback.onSuccess(movieResponse)
+                }
+            }
+        })
+    }
 }
