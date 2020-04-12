@@ -46,7 +46,7 @@ class MovieListAdapter (private val inflater: LayoutInflater,
 
         fun bind(movie: Movie) {
             posterIv.apply {
-                loadImage(getPosterUrl(movie.poster_path))
+                loadImage(getPosterUrl(movie.posterPath))
 
                 setOnClickListener {
                     onInteractionListener.onItemClicked(movie)

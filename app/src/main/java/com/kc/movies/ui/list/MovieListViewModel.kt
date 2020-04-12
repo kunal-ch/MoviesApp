@@ -11,17 +11,18 @@ import com.kc.movies.service.MovieCallback
 class MovieListViewModel(application: Application) : AndroidViewModel(application) {
 
     val moviesLiveData = MutableLiveData<List<Movie>>()
+    val errorLiveData = MutableLiveData<String>()
     private val movieRepository = getApplication<MovieApp>().getMovieRepository()
 
     fun getMovies(){
         movieRepository.getMovies(object: MovieCallback<Movie>{
             override fun onSuccess(data: List<Movie>?) {
-                Log.d("TAG", "data.count ${data?.size}")
                 moviesLiveData.value = data
             }
 
             override fun onError(error: String?) {
                 Log.d("TAG", "error $error")
+                errorLiveData.value = error
             }
         })
     }
