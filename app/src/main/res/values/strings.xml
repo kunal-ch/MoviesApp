@@ -1,4 +1,16 @@
 <resources>
   <string name="app_name">MoviesApp</string>
   <string name="discover">Discover</string>
+  <string name="transition_name_details">details_image</string>
+  <string name="show_more">Show More</string>
+  <string name="search_title">Search</string>
+  <string name="release_date">Release Date</string>
+  <string name="placeholder">-</string>
+  <string name="rating">Rating</string>
+  <string name="runtime">Runtime</string>
+  <string name="cast">Cast</string>
+  <string name="about">About</string>
+  <string name="feedback">Feedback</string>
+  <string name="about_desc">This app gets all its information and pictures from The Movie DB. </string>
+  <string name="close">Close</string>
 </resources>

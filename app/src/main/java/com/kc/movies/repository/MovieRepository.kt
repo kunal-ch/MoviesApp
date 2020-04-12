@@ -22,7 +22,6 @@ class MovieRepository(application: Application) {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 if (response.body() != null) {
                     val movieResponse:MovieResponse  = response.body()!!
-                    Log.d("TAG", "response: $movieResponse")
                     callback.onSuccess(movieResponse.results)
                 }
             }
@@ -38,7 +37,6 @@ class MovieRepository(application: Application) {
             override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
                 if (response.body() != null) {
                     val movieResponse:Movie  = response.body()!!
-                    Log.d("TAG", "response: $movieResponse")
                     callback.onSuccess(movieResponse)
                 }
             }
