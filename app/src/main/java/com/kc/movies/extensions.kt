@@ -3,6 +3,7 @@ package com.kc.movies
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 
 /**
@@ -16,10 +17,9 @@ fun ImageView.loadImage(imageUrl: String, circleCrop: Boolean = false) {
             .load(imageUrl)
 
     if (circleCrop) {
-        //builder.circleCrop()
+        builder.apply(RequestOptions().circleCrop())
     }
 
     builder.transition(DrawableTransitionOptions.withCrossFade())
-            //.override(Target.SIZE_ORIGINAL)
             .into(this)
 }
