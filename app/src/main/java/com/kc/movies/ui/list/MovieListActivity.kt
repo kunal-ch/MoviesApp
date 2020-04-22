@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kc.movies.R
 import com.kc.movies.model.Movie
 import com.kc.movies.ui.detail.MovieDetailActivity
-import com.kc.movies.utils.Key
-import com.kc.movies.utils.hideKeyboard
-import com.kc.movies.utils.isOnline
+import com.kc.movies.utils.*
 import kotlinx.android.synthetic.main.activity_movie_list.*
 
 private const val SPAN_COUNT = 2
@@ -31,17 +29,22 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_movie_list)
 
-    movieListAdapter = MovieListAdapter(layoutInflater, this)
-    viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
     setupUI()
+    setUpLiveDataListeners()
+    checkForConnection()
+  }
 
+  private fun setUpLiveDataListeners() {
     viewModel.moviesLiveData.observe(this, Observer { it ->
       homePb?.visibility = View.GONE
       movieListAdapter?.setMovies(it)
       homeRv?.scheduleLayoutAnimation()
     })
-    checkForConnection()
-    checkForError()
+
+    viewModel.errorLiveData.observe(this, Observer { it ->
+      homePb.visibility = View.GONE
+      showErrorDialog(this,it)
+    })
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -60,22 +63,10 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
     return true
   }
 
-  private fun checkForError() {
-    viewModel.errorLiveData.observe(this, Observer { it ->
-      homePb.visibility = View.GONE
-      val builder = AlertDialog.Builder(this)
-      builder.setTitle("MoviesApp")
-      builder.setMessage(it)
-      builder.setIcon(android.R.drawable.ic_dialog_alert)
-      builder.setPositiveButton("OK"){dialogInterface, which ->
-      }
-      val alertDialog: AlertDialog = builder.create()
-      alertDialog.setCancelable(false)
-      alertDialog.show()
-    })
-  }
-
   private fun setupUI(){
+    movieListAdapter = MovieListAdapter(layoutInflater, this)
+    viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
+
     setSupportActionBar(homeToolbar)
     homeToolbar?.title = ""
 
@@ -95,16 +86,7 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
   private fun checkForConnection(){
     if (!isOnline(this)) {
       homePb.visibility = View.GONE
-      val builder = AlertDialog.Builder(this)
-      builder.setTitle("MoviesApp")
-      builder.setMessage("No internet connection available!!")
-      builder.setIcon(android.R.drawable.ic_dialog_alert)
-      builder.setPositiveButton("Try Again"){dialogInterface, which ->
-        checkForConnection()
-      }
-      val alertDialog: AlertDialog = builder.create()
-      alertDialog.setCancelable(false)
-      alertDialog.show()
+      showAlertDialogForList(this)
     } else {
       homePb.visibility = View.VISIBLE
       viewModel.getMovies()
