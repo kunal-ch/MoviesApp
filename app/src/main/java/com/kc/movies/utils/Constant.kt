@@ -8,3 +8,7 @@ object Constant {
 object Key {
     const val MOVIE = "KEY_MOVIE"
 }
+
+object Search {
+    var isSearching = false
+}

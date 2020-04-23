@@ -3,8 +3,8 @@ package com.kc.movies.ui.list
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -24,6 +24,7 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
   private lateinit var viewModel: MovieListViewModel
   private var movieListAdapter: MovieListAdapter? = null
   var searchView: SearchView? = null
+  var pageNo = 1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
 
     setupUI()
     setUpLiveDataListeners()
-    checkForConnection()
+    fetchApi(pageNo, true)
   }
 
   private fun setUpLiveDataListeners() {
@@ -51,6 +52,17 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
     menuInflater.inflate(R.menu.menu_home, menu)
     val searchMenuItem = menu.findItem(R.id.searchItem)
     searchView = searchMenuItem.actionView as SearchView
+    searchMenuItem.setOnActionExpandListener(object: MenuItem.OnActionExpandListener{
+      override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+        Search.isSearching = true
+        return true
+      }
+
+      override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+        Search.isSearching = false
+        return true
+      }
+    })
     searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
       override fun onQueryTextSubmit(query: String?): Boolean {
         return false
@@ -65,6 +77,7 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
 
   private fun setupUI(){
     movieListAdapter = MovieListAdapter(layoutInflater, this)
+    movieListAdapter?.setHasStableIds(true)
     viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
 
     setSupportActionBar(homeToolbar)
@@ -74,22 +87,22 @@ class MovieListActivity : AppCompatActivity(), MovieListAdapter.OnInteractionLis
     homeRv.layoutManager = GridLayoutManager(this, SPAN_COUNT)
     homeRv.adapter = movieListAdapter
 
-    //hide search keyboard when scrolling
-    homeRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-      override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        hideKeyboard(this@MovieListActivity)
-        super.onScrollStateChanged(recyclerView, newState)
+    val gridLayoutManager = homeRv.layoutManager as GridLayoutManager
+    val listener = object: EndlessRecyclerViewScrollListener(gridLayoutManager) {
+      override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+        fetchApi(page+1, false)
       }
-    })
+    }
+    homeRv.addOnScrollListener(listener)
   }
 
-  private fun checkForConnection(){
+  private fun fetchApi(pageNo: Int, showAlert: Boolean){
     if (!isOnline(this)) {
       homePb.visibility = View.GONE
-      showAlertDialogForList(this)
+      if (showAlert) showAlertDialogForList(this)
     } else {
       homePb.visibility = View.VISIBLE
-      viewModel.getMovies()
+      viewModel.getMovies(pageNo)
     }
   }
 

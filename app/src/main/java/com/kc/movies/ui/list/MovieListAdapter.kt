@@ -18,8 +18,8 @@ class MovieListAdapter (private val inflater: LayoutInflater,
                         private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.Adapter<MovieListAdapter.HomeViewHolder>(), Filterable {
 
-    private var movies = listOf<Movie>()
-    private var moviesFiltered = listOf<Movie>()
+    private var movies = arrayListOf<Movie>()
+    private var moviesFiltered = arrayListOf<Movie>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             HomeViewHolder(
@@ -31,12 +31,17 @@ class MovieListAdapter (private val inflater: LayoutInflater,
         holder.bind(moviesFiltered[position])
     }
 
+    override fun getItemId(position: Int): Long {
+        return moviesFiltered[position].id!!
+    }
+
     override fun getItemCount() = moviesFiltered.size
 
-    fun setMovies(movies: List<Movie>) {
-        this.movies = movies
-        this.moviesFiltered = movies
-        notifyDataSetChanged()
+    fun setMovies(latest_movies: List<Movie>) {
+        val positionStart = moviesFiltered.size
+        this.movies.addAll(latest_movies)
+        this.moviesFiltered.addAll(latest_movies)
+        notifyItemRangeInserted(positionStart, moviesFiltered.size)
     }
 
     interface OnInteractionListener {

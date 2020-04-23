@@ -14,8 +14,8 @@ class MovieListViewModel(application: Application) : AndroidViewModel(applicatio
     val errorLiveData = MutableLiveData<String>()
     private val movieRepository = getApplication<MovieApp>().getMovieRepository()
 
-    fun getMovies(){
-        movieRepository.getMovies(object: MovieCallback<Movie>{
+    fun getMovies(pageNo: Int){
+        movieRepository.getMovies(pageNo, object: MovieCallback<Movie>{
             override fun onSuccess(data: List<Movie>?) {
                 moviesLiveData.value = data
             }

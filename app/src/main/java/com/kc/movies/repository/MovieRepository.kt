@@ -13,8 +13,8 @@ import retrofit2.Response
 
 class MovieRepository(application: Application) {
 
-    fun getMovies(callback: MovieCallback<Movie>){
-        var call = ApiClient.build()?.getTopRatedMovies(1)
+    fun getMovies(pageNo: Int, callback: MovieCallback<Movie>){
+        var call = ApiClient.build()?.getTopRatedMovies(pageNo)
         call?.enqueue(object : Callback<MovieResponse> {
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 callback.onError(t.message)

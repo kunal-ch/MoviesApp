@@ -55,8 +55,6 @@
         android:layout_marginBottom="20dp"
         android:clipToPadding="false"
         android:fitsSystemWindows="true"
-        android:layoutAnimation="@anim/list_animation"
-        android:overScrollMode="never"
         android:padding="8dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:listitem="@layout/card_home" />
