@@ -2,9 +2,7 @@ package com.kc.movies.ui.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -40,6 +38,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
     homeRv = mView.findViewById(R.id.homeRv) as RecyclerView
     homePb = mView.findViewById(R.id.homePb) as ProgressBar
 
+    setHasOptionsMenu(true)
     setupUI()
     setUpLiveDataListeners()
     fetchApi(pageNo, true)
@@ -60,8 +59,8 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
     })
   }
 
-  /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_home, menu)
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.menu_home, menu)
     val searchMenuItem = menu.findItem(R.id.searchItem)
     searchView = searchMenuItem.actionView as SearchView
     searchMenuItem.setOnActionExpandListener(object: MenuItem.OnActionExpandListener{
@@ -75,17 +74,17 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
         return true
       }
     })
-    searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+    searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
       override fun onQueryTextSubmit(query: String?): Boolean {
         return false
       }
+
       override fun onQueryTextChange(newText: String?): Boolean {
-        movieListAdapter!!.filter.filter(newText)
+        movieListAdapter.filter.filter(newText)
         return false
       }
     })
-    return true
-  }*/
+  }
 
   private fun setupUI() {
     viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
