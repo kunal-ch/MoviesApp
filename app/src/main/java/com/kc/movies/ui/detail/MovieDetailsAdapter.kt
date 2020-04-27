@@ -92,7 +92,7 @@ class MovieDetailAdapter(private val inflater: LayoutInflater)
 
             if (movie.genres?.isNotEmpty() == true) {
                 detailsGenresTv.visibility = View.VISIBLE
-                detailsGenresTv.text = movie.genres
+                detailsGenresTv.text = movie.genres!!
                         .map { it.name }
                         .joinToString(separator = " | ")
             } else {

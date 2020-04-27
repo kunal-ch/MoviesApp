@@ -22,13 +22,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_favourite_selector"
+                android:button="@null"/>
+
         <ImageView
             android:id="@+id/homePosterIv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/checkbox"
             android:adjustViewBounds="true"
             android:background="@color/light_grey"
             android:scaleType="fitXY" />
+
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 

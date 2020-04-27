@@ -1,9 +1,10 @@
-package com.kc.movies.utils
+package com.kc.movies.customviews
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.kc.movies.utils.Search
 
 abstract class EndlessRecyclerViewScrollListener(): RecyclerView.OnScrollListener() {
 
