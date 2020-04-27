@@ -30,8 +30,11 @@
                 android:id="@+id/checkbox"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:layout_margin="5dp"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_favourite_selector"
+                android:button="@null"/>
 
         <ImageView
             android:id="@+id/homePosterIv"

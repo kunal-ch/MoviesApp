@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kc.movies.R
 import com.kc.movies.customviews.EndlessRecyclerViewScrollListener
-import com.kc.movies.listener.RecyclerViewItemCheckListener
 import com.kc.movies.database.MovieDatabaseRepository
+import com.kc.movies.listener.RecyclerViewItemCheckListener
 import com.kc.movies.listener.RecyclerViewItemClickListener
 import com.kc.movies.model.Movie
 import com.kc.movies.ui.detail.MovieDetailActivity
@@ -136,5 +136,10 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
     } else {
       movieDatabaseRepository.deleteFavMovie(movie)
     }
+  }
+
+  companion object {
+    @JvmStatic
+    fun newInstance() = MovieListFragment()
   }
 }

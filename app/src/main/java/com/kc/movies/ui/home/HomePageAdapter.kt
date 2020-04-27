@@ -12,9 +12,9 @@ class HomePageAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> MovieListFragment()
-            1 -> FavouriteFragment()
-            else -> MovieListFragment()
+            0 -> MovieListFragment.newInstance()
+            1 -> FavouriteFragment.newInstance()
+            else -> MovieListFragment.newInstance()
         }
     }
 }

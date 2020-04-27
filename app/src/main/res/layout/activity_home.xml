@@ -22,16 +22,7 @@
                 app:contentInsetStart="0dp"
                 app:contentInsetEnd="0dp"
                 app:contentInsetEndWithActions="0dp"
-                app:title="">
-
-                <TextView
-                    style="@style/Rubik.Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="50dp"
-                    android:textStyle="bold"
-                    android:text="@string/discover" />
-
+                app:titleMarginStart="32dp">
             </androidx.appcompat.widget.Toolbar>
 
         </FrameLayout>

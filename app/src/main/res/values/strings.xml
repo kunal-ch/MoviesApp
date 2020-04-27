@@ -1,6 +1,5 @@
 <resources>
   <string name="app_name">MoviesApp</string>
-  <string name="discover">Discover</string>
   <string name="transition_name_details">details_image</string>
   <string name="show_more">Show More</string>
   <string name="search_title">Search</string>

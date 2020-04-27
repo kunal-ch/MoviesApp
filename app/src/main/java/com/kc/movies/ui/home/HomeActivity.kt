@@ -17,16 +17,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setUpUI() {
         setSupportActionBar(homeToolbar)
-        homeToolbar?.title = ""
-        //homeToolbar.collapseActionView()
-
         viewpager.adapter = HomePageAdapter(this)
-        val tabLayoutMediator = TabLayoutMediator(tabLayout, viewpager, object: TabLayoutMediator.TabConfigurationStrategy{
-            override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-                when(position){
-                    0 -> tab.text = "All"
-                    1 -> tab.text = "Favourite"
-                }
+        val tabLayoutMediator = TabLayoutMediator(tabLayout, viewpager, TabLayoutMediator.TabConfigurationStrategy { tab, position ->
+            when(position){
+                0 -> tab.text = "All"
+                1 -> tab.text = "Favourite"
             }
         })
         tabLayoutMediator.attach()
