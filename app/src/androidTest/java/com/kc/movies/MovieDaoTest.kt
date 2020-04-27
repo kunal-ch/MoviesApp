@@ -35,16 +35,37 @@ class MovieDaoTest{
     }
 
     @Test
-    fun addingAndRetrievingData(){
-        val preInsertMovies = movieDao.getAllMovies()
+    fun validIdTest(){
         val movie = Movie(1)
-        movieDao.insertMovie(movie)
+        database.getMovieDao().insertMovie(movie)
+        val postInsertMovies: Movie? = database.getMovieDao().getAllMovies().value?.first()
+        Assert.assertEquals(movie.id, postInsertMovies?.id)
+    }
 
-        val postInsertMovies = movieDao.getAllMovies()
-        //val sizeDifference: Int? = postInsertMovies.value?.size - preInsertMovies.value?.size
-        //Assert.assertEquals(1, sizeDifference)
-        //val retrievedId = postInsertMovies.last().id
-        //Assert.assertEquals(1L, retrievedId)
+    @Test
+    fun inValidIdTest(){
+        val movie1 = Movie(1)
+        val movie = Movie(2)
+        database.getMovieDao().insertMovie(movie)
+        val postInsertMovies: Movie? = database.getMovieDao().getAllMovies().value?.first()
+        Assert.assertNotEquals(movie1.id, postInsertMovies?.id)
+    }
+
+    @Test
+    fun validTitleTest(){
+        val movie = Movie(1, title= "Spiderman")
+        database.getMovieDao().insertMovie(movie)
+        val postInsertMovies: Movie? = database.getMovieDao().getAllMovies().value?.first()
+        Assert.assertEquals(movie.title, postInsertMovies?.title)
+    }
+
+    @Test
+    fun inValidTitleTest(){
+        val movie1 = Movie(1, title= "Spiderman")
+        val movie = Movie(1, title= "Batman")
+        database.getMovieDao().insertMovie(movie)
+        val postInsertMovies: Movie? = database.getMovieDao().getAllMovies().value?.first()
+        Assert.assertEquals(movie1.title, postInsertMovies?.title)
     }
 
     @After
