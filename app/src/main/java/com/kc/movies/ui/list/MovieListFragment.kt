@@ -11,25 +11,25 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kc.movies.R
-import com.kc.movies.database.MovieDao
-import com.kc.movies.database.MovieDatabase
+import com.kc.movies.customviews.EndlessRecyclerViewScrollListener
+import com.kc.movies.listener.RecyclerViewItemCheckListener
+import com.kc.movies.database.MovieDatabaseRepository
+import com.kc.movies.listener.RecyclerViewItemClickListener
 import com.kc.movies.model.Movie
 import com.kc.movies.ui.detail.MovieDetailActivity
 import com.kc.movies.utils.*
 
-class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
+class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerViewItemCheckListener {
 
   private lateinit var viewModel: MovieListViewModel
   private lateinit var movieListAdapter: MovieListAdapter
   var pageNo = 1
-
-  private lateinit var movieDatabase: MovieDatabase
-  private lateinit var movieDao: MovieDao
-
+  private lateinit var movieDatabaseRepository: MovieDatabaseRepository
   private lateinit var mView: View
   private lateinit var homeRv: RecyclerView
   private lateinit var homePb: ProgressBar
   private lateinit var searchView: SearchView
+  private var favMovieIds = ArrayList<Long>()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -37,6 +37,7 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
     mView = inflater.inflate(R.layout.fragment_movie_list, container, false)
     homeRv = mView.findViewById(R.id.homeRv) as RecyclerView
     homePb = mView.findViewById(R.id.homePb) as ProgressBar
+    movieDatabaseRepository = MovieDatabaseRepository(activity!!.applicationContext)
 
     setHasOptionsMenu(true)
     setupUI()
@@ -47,15 +48,21 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
   }
 
   private fun setUpLiveDataListeners() {
-    viewModel.moviesLiveData.observe(this, Observer { it ->
+    viewModel.moviesLiveData.observe(this, Observer { movies ->
       homePb.visibility = View.GONE
-      movieListAdapter.setMovies(it)
+      movieListAdapter.setMovies(movies)
       homeRv.scheduleLayoutAnimation()
     })
 
-    viewModel.errorLiveData.observe(this, Observer { it ->
+    viewModel.errorLiveData.observe(this, Observer { errorString ->
       homePb.visibility = View.GONE
-      showErrorDialog(activity!!,it)
+      showErrorDialog(activity!!,errorString)
+    })
+
+    movieDatabaseRepository.getAllFavMoviesIds().observe(this, Observer { ids ->
+      favMovieIds.clear()
+      favMovieIds.addAll(ids)
+      movieListAdapter.setFavMovieIds(favMovieIds)
     })
   }
 
@@ -88,10 +95,11 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
 
   private fun setupUI() {
     viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
-    movieListAdapter = MovieListAdapter(layoutInflater, this)
+    movieListAdapter = MovieListAdapter(layoutInflater, this, this)
     movieListAdapter.setHasStableIds(true)
 
     homeRv.setHasFixedSize(true)
+    homeRv.itemAnimator = null
     homeRv.layoutManager = GridLayoutManager(activity, 2)
     homeRv.adapter = movieListAdapter
 
@@ -120,5 +128,13 @@ class MovieListFragment : Fragment(), MovieListAdapter.OnInteractionListener {
     val intent = Intent(activity, MovieDetailActivity::class.java)
     intent.putExtras(bundle)
     startActivity(intent)
+  }
+
+  override fun onItemChecked(isCheck: Boolean, movie: Movie) {
+    if (isCheck) {
+      movieDatabaseRepository.insertFavMovie(movie)
+    } else {
+      movieDatabaseRepository.deleteFavMovie(movie)
+    }
   }
 }
