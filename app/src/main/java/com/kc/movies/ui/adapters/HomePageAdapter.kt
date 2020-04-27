@@ -1,10 +1,10 @@
-package com.kc.movies.ui.home
+package com.kc.movies.ui.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.kc.movies.ui.favourite.FavouriteFragment
-import com.kc.movies.ui.list.MovieListFragment
+import com.kc.movies.ui.view.FavouriteFragment
+import com.kc.movies.ui.view.MovieListFragment
 
 class HomePageAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 

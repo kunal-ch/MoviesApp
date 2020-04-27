@@ -1,4 +1,4 @@
-package com.kc.movies.ui.detail
+package com.kc.movies.ui.view
 
 import android.content.Intent
 import android.net.Uri
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kc.movies.R
 import com.kc.movies.loadImage
 import com.kc.movies.model.Movie
+import com.kc.movies.ui.adapters.MovieDetailAdapter
+import com.kc.movies.ui.viewmodels.MovieDetailViewModel
 import com.kc.movies.utils.*
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 

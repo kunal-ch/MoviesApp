@@ -1,4 +1,4 @@
-package com.kc.movies.ui.detail
+package com.kc.movies.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View

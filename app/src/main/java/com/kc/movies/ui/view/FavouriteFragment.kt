@@ -1,4 +1,4 @@
-package com.kc.movies.ui.favourite
+package com.kc.movies.ui.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.kc.movies.R
-import com.kc.movies.database.MovieDatabaseRepository
+import com.kc.movies.repository.MovieDatabaseRepository
 import com.kc.movies.listener.RecyclerViewItemClickListener
 import com.kc.movies.listener.RecyclerViewItemCheckListener
 import com.kc.movies.model.Movie
-import com.kc.movies.ui.detail.MovieDetailActivity
-import com.kc.movies.ui.list.MovieListAdapter
+import com.kc.movies.ui.adapters.MovieListAdapter
 import com.kc.movies.utils.Key
 
 /* A simple [Fragment] subclass.

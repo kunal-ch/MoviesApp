@@ -1,10 +1,10 @@
-package com.kc.movies.ui.home
+package com.kc.movies.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kc.movies.R
+import com.kc.movies.ui.adapters.HomePageAdapter
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {

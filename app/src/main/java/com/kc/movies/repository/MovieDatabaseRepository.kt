@@ -1,9 +1,10 @@
-package com.kc.movies.database
+package com.kc.movies.repository
 
 import android.content.Context
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+import com.kc.movies.database.MovieDatabase
 import com.kc.movies.model.Movie
 
 class MovieDatabaseRepository(val context: Context) {
@@ -11,7 +12,7 @@ class MovieDatabaseRepository(val context: Context) {
     private val DB_NAME = "movie-db"
     private var movieDatabase: MovieDatabase
     init {
-        movieDatabase = Room.databaseBuilder(context,MovieDatabase::class.java, DB_NAME).build()
+        movieDatabase = Room.databaseBuilder(context, MovieDatabase::class.java, DB_NAME).build()
     }
 
     fun insertFavMovie(movie: Movie){

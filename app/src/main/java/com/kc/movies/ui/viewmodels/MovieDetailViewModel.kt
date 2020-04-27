@@ -1,4 +1,4 @@
-package com.kc.movies.ui.detail
+package com.kc.movies.ui.viewmodels
 
 import android.app.Application
 import android.util.Log
