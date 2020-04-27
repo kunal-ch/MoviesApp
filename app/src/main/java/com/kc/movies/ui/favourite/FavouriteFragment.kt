@@ -1,59 +1,98 @@
 package com.kc.movies.ui.favourite
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.kc.movies.R
+import com.kc.movies.database.MovieDatabaseRepository
+import com.kc.movies.listener.RecyclerViewItemClickListener
+import com.kc.movies.listener.RecyclerViewItemCheckListener
+import com.kc.movies.model.Movie
+import com.kc.movies.ui.detail.MovieDetailActivity
+import com.kc.movies.ui.list.MovieListAdapter
+import com.kc.movies.utils.Key
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+/* A simple [Fragment] subclass.
+* Use the [FavouriteFragment.newInstance] factory method to
+* create an instance of this fragment.
+*/
+class FavouriteFragment : Fragment(), RecyclerViewItemClickListener, RecyclerViewItemCheckListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavouriteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FavouriteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var movieListAdapter: MovieListAdapter
+    private lateinit var movieDatabaseRepository: MovieDatabaseRepository
+    private lateinit var mView: View
+    private lateinit var homeRv: RecyclerView
+    private lateinit var homePb: ProgressBar
+    private var favMovieIds = ArrayList<Long>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourite, container, false)
+
+        mView = inflater.inflate(R.layout.fragment_movie_list, container, false)
+        homeRv = mView.findViewById(R.id.homeRv) as RecyclerView
+        homePb = mView.findViewById(R.id.homePb) as ProgressBar
+        movieDatabaseRepository = MovieDatabaseRepository(activity!!.applicationContext)
+        setupUI()
+        //setUpLiveDataListeners()
+        return mView
+    }
+
+    private fun setupUI() {
+        movieListAdapter = MovieListAdapter(layoutInflater, this, this)
+        movieListAdapter.setHasStableIds(true)
+
+        homePb.visibility = View.GONE
+        homeRv.setHasFixedSize(true)
+        homeRv.itemAnimator = null
+        homeRv.layoutManager = GridLayoutManager(activity, 2)
+        homeRv.adapter = movieListAdapter
+    }
+
+    private fun setUpLiveDataListeners() {
+        movieDatabaseRepository.getAllFavMovies().observe(this, object: Observer<List<Movie>> {
+            override fun onChanged(t: List<Movie>?) {
+                movieListAdapter.setNewMovies(t!!)
+            }
+        })
+
+        movieDatabaseRepository.getAllFavMoviesIds().observe(this, object: Observer<List<Long>> {
+            override fun onChanged(ids: List<Long>) {
+                favMovieIds.clear()
+                favMovieIds.addAll(ids)
+                movieListAdapter.setFavMovieIds(favMovieIds)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setUpLiveDataListeners()
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavouriteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                FavouriteFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
+        fun newInstance() = FavouriteFragment()
+    }
+
+    override fun onItemClicked(movie: Movie) {
+        val bundle = Bundle()
+        bundle.putSerializable(Key.MOVIE, movie)
+        val intent = Intent(activity, MovieDetailActivity::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    override fun onItemChecked(isCheck: Boolean, movie: Movie) {
+        if (!isCheck) {
+            movieDatabaseRepository.deleteFavMovie(movie)
+        }
     }
 }
