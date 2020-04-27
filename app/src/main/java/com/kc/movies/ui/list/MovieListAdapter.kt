@@ -47,6 +47,10 @@ class MovieListAdapter(private val inflater: LayoutInflater,
         notifyItemRangeInserted(positionStart, moviesFiltered.size)
     }
 
+    fun getMovies() : List<Movie> {
+        return this.moviesFiltered
+    }
+
     // For Favourite Fragment
     fun setNewMovies(new_movies: List<Movie>) {
         this.movies.clear()

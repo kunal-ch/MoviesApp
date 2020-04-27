@@ -12,4 +12,5 @@
   <string name="feedback">Feedback</string>
   <string name="about_desc">This app gets all its information and pictures from The Movie DB. </string>
   <string name="close">Close</string>
+  <string name="no_data_available">No Data Available !!</string>
 </resources>

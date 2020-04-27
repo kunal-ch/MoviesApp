@@ -48,8 +48,7 @@ fun showAlertDialogForList(activity: Activity) {
     builder.setTitle("MoviesApp")
     builder.setMessage("No internet connection available!!")
     builder.setIcon(android.R.drawable.ic_dialog_alert)
-    builder.setPositiveButton("Try Again"){dialogInterface, which ->
-        showAlertDialogForList(activity)
+    builder.setPositiveButton("OK"){dialogInterface, which ->
     }
     val alertDialog: AlertDialog = builder.create()
     alertDialog.setCancelable(false)

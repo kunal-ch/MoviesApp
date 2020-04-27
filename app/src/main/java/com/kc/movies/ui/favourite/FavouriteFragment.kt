@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ class FavouriteFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
     private lateinit var mView: View
     private lateinit var homeRv: RecyclerView
     private lateinit var homePb: ProgressBar
+    private lateinit var emptyView: TextView
     private var favMovieIds = ArrayList<Long>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +41,7 @@ class FavouriteFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
         mView = inflater.inflate(R.layout.fragment_movie_list, container, false)
         homeRv = mView.findViewById(R.id.homeRv) as RecyclerView
         homePb = mView.findViewById(R.id.homePb) as ProgressBar
+        emptyView = mView.findViewById(R.id.empty_view) as TextView
         movieDatabaseRepository = MovieDatabaseRepository(activity!!.applicationContext)
         setupUI()
         //setUpLiveDataListeners()
@@ -60,6 +63,7 @@ class FavouriteFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
         movieDatabaseRepository.getAllFavMovies().observe(this, object: Observer<List<Movie>> {
             override fun onChanged(t: List<Movie>?) {
                 movieListAdapter.setNewMovies(t!!)
+                checkForEmptyView()
             }
         })
 
@@ -70,6 +74,16 @@ class FavouriteFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
                 movieListAdapter.setFavMovieIds(favMovieIds)
             }
         })
+    }
+
+    private fun checkForEmptyView(){
+        if (movieListAdapter.getMovies().isEmpty()){
+            emptyView.visibility = View.VISIBLE
+            homeRv.visibility = View.GONE
+        } else {
+            emptyView.visibility = View.GONE
+            homeRv.visibility = View.VISIBLE
+        }
     }
 
     override fun onResume() {

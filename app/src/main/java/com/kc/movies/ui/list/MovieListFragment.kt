@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,6 +29,7 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
   private lateinit var mView: View
   private lateinit var homeRv: RecyclerView
   private lateinit var homePb: ProgressBar
+  private lateinit var emptyView: TextView
   private lateinit var searchView: SearchView
   private var favMovieIds = ArrayList<Long>()
 
@@ -37,6 +39,7 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
     mView = inflater.inflate(R.layout.fragment_movie_list, container, false)
     homeRv = mView.findViewById(R.id.homeRv) as RecyclerView
     homePb = mView.findViewById(R.id.homePb) as ProgressBar
+    emptyView = mView.findViewById(R.id.empty_view) as TextView
     movieDatabaseRepository = MovieDatabaseRepository(activity!!.applicationContext)
 
     setHasOptionsMenu(true)
@@ -52,11 +55,13 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
       homePb.visibility = View.GONE
       movieListAdapter.setMovies(movies)
       homeRv.scheduleLayoutAnimation()
+      checkForEmptyView()
     })
 
     viewModel.errorLiveData.observe(this, Observer { errorString ->
       homePb.visibility = View.GONE
       showErrorDialog(activity!!,errorString)
+      checkForEmptyView()
     })
 
     movieDatabaseRepository.getAllFavMoviesIds().observe(this, Observer { ids ->
@@ -78,6 +83,7 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
 
       override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         Search.isSearching = false
+        checkForEmptyView()
         return true
       }
     })
@@ -88,6 +94,7 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
 
       override fun onQueryTextChange(newText: String?): Boolean {
         movieListAdapter.filter.filter(newText)
+        checkForEmptyView()
         return false
       }
     })
@@ -115,10 +122,21 @@ class MovieListFragment : Fragment(), RecyclerViewItemClickListener, RecyclerVie
   private fun fetchApi(pageNo: Int, showAlert: Boolean){
     if (!isOnline(activity!!.applicationContext)) {
       homePb.visibility = View.GONE
+      checkForEmptyView()
       if (showAlert) showAlertDialogForList(activity!!)
     } else {
       homePb.visibility = View.VISIBLE
       viewModel.getMovies(pageNo)
+    }
+  }
+
+  private fun checkForEmptyView(){
+    if (movieListAdapter.getMovies().isEmpty()){
+      emptyView.visibility = View.VISIBLE
+      homeRv.visibility = View.GONE
+    } else {
+      emptyView.visibility = View.GONE
+      homeRv.visibility = View.VISIBLE
     }
   }
 
