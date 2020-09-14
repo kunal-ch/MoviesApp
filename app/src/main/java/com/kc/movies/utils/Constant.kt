@@ -1,7 +1,7 @@
 package com.kc.movies.utils
 
 object Constant {
-    const val API_KEY: String = "5c5d866c24748758fb064b3a52b82f6a"
+    const val API_KEY: String = ""
     const val BASE_URL: String = "https://api.themoviedb.org/3/"
 }
 
